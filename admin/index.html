@@ -54,5 +54,25 @@
 
         </div>
     </div>
+
+    <script>
+        //入口函数
+
+        $(function () {
+           //加载个人信息
+           $.ajax({
+               url:'https://autumnfish.cn/bignews/api/v1/admin/user/info',
+               type:'get',
+               dataType:'json',
+               success: function(backData){
+                console.log(backData);
+                //渲染数据
+                $('.user_info>img').attr('src',backData.data.userPic);
+                $('.user_info>span').text(backData.data.nickname);
+                $('.user_center_link>img').attr('src',backData.data.userPic);
+               }
+           }); 
+        });
+    </script>
 </body>
 </html>

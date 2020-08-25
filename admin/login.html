@@ -38,6 +38,86 @@
     </div>
   </div>
 
+  <!-- 模态框 -->
+  <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+              aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">友情提示</h4>
+        </div>
+        <div class="modal-body">
+          <p>One fine body&hellip;</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-dismiss="modal">确认</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+  <script>
+    //入口函数
+    $(function () {
+      /* 1.登录按钮点击事件
+     注意点： form表单中的按钮，需要阻止默认跳转
+
+     1.1 获取输入框文本 username 和 password
+     1.2 非空判断
+     1.3 ajax发送请求
+     1.4 服务器响应
+       成功 ： 跳转到首页
+       失败：  弹窗提示用户原因
+      */
+      $('.input_sub').click(function (e) {
+        //阻止form表单默认跳转
+        e.preventDefault();
+        //获取输入框文本
+        let username = $('.input_txt').val();
+        let password = $('.input_pass').val();
+
+        //非空判断
+        if (username.length == 0 || password == 0) {
+          //修改模态框
+          $('.modal-body>p').text('用户名和密码不能为空');
+          //弹出bootstrap模态框
+          $('#myModal').modal();
+          return;
+        };
+        //ajax发送请求
+        $.ajax({
+          url: 'https://autumnfish.cn/bignews/api/v1/admin/user/login',
+          type: 'post',
+          dataType: 'json',
+          data: {
+            username: username,
+            password: password
+          },
+          success: function (backData) {
+            console.log(backData);
+            if (backData.code == 200) {
+              //使用localStorage存储用户token
+              localStorage.setItem('token', backData.token);
+              //修改模态框
+              $('.modal-body>p').text('登录成功');
+              //弹出bootstrap模态框
+              $('#myModal').modal();
+              //给模态框注册隐藏事件
+              $('#myModal').on('hidden.bs.modal', function (e) {
+                //跳转到首页
+                window.location.href = './index.html';
+              })
+            } else {
+              $('.modal-body>p').text(backData.msg);
+              //弹出bootstrap模态框
+              $('#myModal').modal();
+            }
+          }
+        });
+      })
+    });
+  </script>
 </body>
 
 </html>
