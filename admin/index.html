@@ -58,13 +58,15 @@
         </div>
     </div>
 
+    <!-- 导入网络层 -->
+    <script src="./libs/http.js"></script>
     <script>
         //入口函数
 
         $(function () {
             //加载个人信息
             $.ajax({
-                url: 'https://autumnfish.cn/bignews/api/v1/admin/user/info',
+                url: BigNew.user_info,
                 type: 'get',
                 dataType: 'json',
                 success: function (backData) {
